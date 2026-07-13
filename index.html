@@ -151,6 +151,20 @@
     .corner.tl { top:0; left:0; } .corner.tr { top:0; right:0; transform:scaleX(-1); }
     .corner.bl { bottom:0; left:0; transform:scaleY(-1); } .corner.br { bottom:0; right:0; transform:scale(-1); }
 
+    /* ── NOTIFICACIÓN (pantalla completa) ── */
+    #notice-overlay { display:none; position:fixed; inset:0; z-index:3000; background:rgba(4,3,5,.92); backdrop-filter:blur(6px); align-items:center; justify-content:center; padding:2rem; opacity:0; transition:opacity .35s ease; }
+    #notice-overlay.show { display:flex; opacity:1; }
+    #notice-box { position:relative; background:var(--surface); border:1px solid var(--accent); border-radius:2px; padding:3rem 2.2rem; max-width:480px; width:100%; text-align:center; box-shadow:0 0 60px rgba(155,63,168,.4),0 20px 60px rgba(0,0,0,.7); transform:translateY(20px); transition:transform .35s ease; }
+    #notice-overlay.show #notice-box { transform:translateY(0); }
+    #notice-box::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,var(--accent),var(--gold),var(--accent),transparent); }
+    .notice-title { font-family:'UnifrakturMaguntia',cursive; font-size:1.8rem; color:var(--bright); text-shadow:0 0 25px var(--glow); margin-bottom:1.2rem; }
+    .notice-text { font-size:1.1rem; color:var(--text); line-height:1.7; }
+    #notice-close-btn { margin-top:2rem; padding:.7rem 2rem; background:linear-gradient(135deg,var(--accent),var(--rose)); border:none; color:#fff; font-family:'Cinzel',serif; font-size:.75rem; letter-spacing:.18em; text-transform:uppercase; cursor:pointer; transition:opacity .2s; box-shadow:0 4px 20px rgba(155,63,168,.35); }
+    #notice-close-btn:hover { opacity:.88; }
+    #notice-x { position:absolute; top:.8rem; right:1rem; background:none; border:none; color:var(--muted); font-size:1.3rem; cursor:pointer; transition:color .2s; }
+    #notice-x:hover { color:var(--rose); }
+    @media (max-width:600px){ #notice-box{ padding:2.2rem 1.4rem; } .notice-title{ font-size:1.4rem; } }
+
     /* ── MOBILE ── */
     @media (max-width:600px) {
       .auth-box { padding:2rem 1.2rem; max-width:100%; }
@@ -186,6 +200,15 @@
 <div class="corner bl"><svg viewBox="0 0 80 80" fill="none"><path d="M0 0 L0 60 Q0 80 20 80 L0 80 Z" fill="#9b3fa8" opacity=".4"/><path d="M5 5 L5 55 Q5 75 25 75" stroke="#c89b3c" stroke-width="1" fill="none"/><circle cx="5" cy="5" r="3" fill="#c89b3c"/></svg></div>
 <div class="corner br"><svg viewBox="0 0 80 80" fill="none"><path d="M0 0 L0 60 Q0 80 20 80 L0 80 Z" fill="#9b3fa8" opacity=".4"/><path d="M5 5 L5 55 Q5 75 25 75" stroke="#c89b3c" stroke-width="1" fill="none"/><circle cx="5" cy="5" r="3" fill="#c89b3c"/></svg></div>
 <div id="particles"></div>
+
+<div id="notice-overlay">
+  <div id="notice-box">
+    <button id="notice-x" onclick="closeNotice()">✕</button>
+    <div class="notice-title">AETERNUS</div>
+    <div class="notice-text">Escribe aquí el mensaje de tu notificación.</div>
+    <button id="notice-close-btn" onclick="closeNotice()">Continuar</button>
+  </div>
+</div>
 
 <!-- 🎵 MÚSICA — pon tu archivo de música en la misma carpeta con el nombre: musica.mp3 -->
 <audio id="bg-audio" ></audio>
@@ -229,6 +252,17 @@ function toggleMusic() {
     audio.pause();
   }
 }
+</script>
+
+<script>
+  window.showNotice = function() {
+    if (sessionStorage.getItem('noticeClosed')) return;
+    document.getElementById('notice-overlay').classList.add('show');
+  };
+  window.closeNotice = function() {
+    document.getElementById('notice-overlay').classList.remove('show');
+    sessionStorage.setItem('noticeClosed', '1');
+  };
 </script>
 
 <div id="app">
@@ -459,6 +493,7 @@ onAuthStateChanged(auth, user => {
     document.getElementById('display-name').textContent     = user.displayName || user.email;
     startCounter();
     loadGallery();
+    showNotice();
   } else {
     document.getElementById('auth-screen').style.display    = '';
     document.getElementById('gallery-screen').style.display = 'none';
