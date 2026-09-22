@@ -165,6 +165,30 @@
     #notice-x:hover { color:var(--rose); }
     @media (max-width:600px){ #notice-box{ padding:2.2rem 1.4rem; } .notice-title{ font-size:1.4rem; } }
 
+    /* ── ROSA NEGRA (dentro de la notificación) ── */
+    .rose-wrap { width:170px; height:190px; margin:0 auto .8rem; position:relative; }
+    .rose-wrap svg { width:100%; height:100%; opacity:0; filter:drop-shadow(0 0 16px rgba(155,63,168,.45)); animation:roseAppear .8s ease .1s forwards; }
+    @keyframes roseAppear { to { opacity:1; } }
+    .petal { transform-origin:100px 130px; opacity:0; animation:bloom 1.8s cubic-bezier(.25,.8,.3,1) forwards; }
+    .petal.p1 { animation-delay:.4s; } .petal.p2 { animation-delay:.55s; } .petal.p3 { animation-delay:.7s; }
+    .petal.p4 { animation-delay:.85s; } .petal.p5 { animation-delay:1s; } .petal.p6 { animation-delay:1.15s; }
+    @keyframes bloom { 0%{opacity:0;transform:scale(.15) rotate(var(--rot,0deg));} 60%{opacity:1;} 100%{opacity:1;transform:scale(1) rotate(var(--rot,0deg));} }
+    .stem { stroke:#241333; stroke-width:3; fill:none; stroke-dasharray:120; stroke-dashoffset:120; animation:growStem 1s ease 1.5s forwards; }
+    @keyframes growStem { to { stroke-dashoffset:0; } }
+    .thorn { opacity:0; animation:fadeInSlow .3s ease forwards; }
+    .thorn.t1 { animation-delay:2s; } .thorn.t2 { animation-delay:2.15s; }
+    .leaf { opacity:0; transform-origin:center; animation:leafOpen .6s ease forwards; }
+    .leaf.l1 { animation-delay:2s; } .leaf.l2 { animation-delay:2.15s; }
+    @keyframes leafOpen { 0%{opacity:0;transform:scale(.3);} 100%{opacity:1;transform:scale(1);} }
+    .glint { opacity:0; animation:glintPulse 3s ease-in-out infinite; }
+    .glint.g1 { animation-delay:1.8s; } .glint.g2 { animation-delay:2.4s; } .glint.g3 { animation-delay:3s; }
+    @keyframes glintPulse { 0%,100%{opacity:0;} 50%{opacity:.6;} }
+    .notice-date { font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:.3em; color:var(--muted); text-transform:uppercase; margin-bottom:.6rem; opacity:0; animation:fadeInSlow 1s ease 1.8s forwards; }
+    @keyframes fadeInSlow { to { opacity:1; } }
+    #notice-box .notice-title { opacity:0; animation:fadeInSlow 1.2s ease 2s forwards; }
+    #notice-box .notice-text { opacity:0; animation:fadeInSlow 1.2s ease 2.3s forwards; }
+    #notice-close-btn { opacity:0; animation:fadeInSlow 1s ease 2.6s forwards; }
+
     /* ── MOBILE ── */
     @media (max-width:600px) {
       .auth-box { padding:2rem 1.2rem; max-width:100%; }
@@ -204,8 +228,43 @@
 <div id="notice-overlay">
   <div id="notice-box">
     <button id="notice-x" onclick="closeNotice()">✕</button>
+
+    <div class="rose-wrap">
+      <svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+        <path class="stem" d="M100 150 C 95 175, 105 195, 98 230"/>
+        <path class="leaf l1" d="M97 190 C 80 188, 68 198, 62 212 C 80 214, 94 206, 97 190 Z" fill="#12091d" stroke="#3a2a4a" stroke-width="1"/>
+        <path class="leaf l2" d="M101 205 C 118 202, 130 212, 136 226 C 118 228, 104 220, 101 205 Z" fill="#12091d" stroke="#3a2a4a" stroke-width="1"/>
+        <path class="thorn t1" d="M96 175 L88 182 L96 181 Z" fill="#1c1030"/>
+        <path class="thorn t2" d="M104 195 L114 200 L104 202 Z" fill="#1c1030"/>
+
+        <g class="petal p1" style="--rot:0deg">
+          <path d="M100 130 C 70 120, 65 85, 100 60 C 135 85, 130 120, 100 130 Z" fill="#0b0710" stroke="#3a2a4a" stroke-width="1"/>
+        </g>
+        <g class="petal p2" style="--rot:60deg">
+          <path d="M100 130 C 70 120, 65 85, 100 60 C 135 85, 130 120, 100 130 Z" fill="#170e22" stroke="#3a2a4a" stroke-width="1" opacity="0.95"/>
+        </g>
+        <g class="petal p3" style="--rot:-60deg">
+          <path d="M100 130 C 70 120, 65 85, 100 60 C 135 85, 130 120, 100 130 Z" fill="#170e22" stroke="#3a2a4a" stroke-width="1" opacity="0.95"/>
+        </g>
+        <g class="petal p4" style="--rot:120deg">
+          <path d="M100 132 C 78 124, 76 100, 100 82 C 124 100, 122 124, 100 132 Z" fill="#0b0710" stroke="#3a2a4a" stroke-width="1"/>
+        </g>
+        <g class="petal p5" style="--rot:-120deg">
+          <path d="M100 132 C 78 124, 76 100, 100 82 C 124 100, 122 124, 100 132 Z" fill="#0b0710" stroke="#3a2a4a" stroke-width="1"/>
+        </g>
+        <g class="petal p6" style="--rot:180deg">
+          <path d="M100 128 C 84 122, 83 105, 100 92 C 117 105, 116 122, 100 128 Z" fill="#000000" stroke="#3a2a4a" stroke-width="1"/>
+        </g>
+
+        <circle class="glint g1" cx="88" cy="95" r="2" fill="#c89b3c"/>
+        <circle class="glint g2" cx="112" cy="100" r="1.6" fill="#c89b3c"/>
+        <circle class="glint g3" cx="100" cy="80" r="1.8" fill="#c89b3c"/>
+      </svg>
+    </div>
+
+    <div class="notice-date">21 · Septiembre</div>
     <div class="notice-title">AETERNUS</div>
-    <div class="notice-text">MI AMOR TE QUIERO MUCHO MUCHO , BESHITO 🖤🖤🖤,MAYUMI PRECIOSA🖤🖤🖤.</div>
+    <div class="notice-text">MI AMOR TE QUIERO MUCHO MUCHO, BESHITO 🖤🖤🖤<br/>MAYUMI PRECIOSA 🖤🖤🖤</div>
     <button id="notice-close-btn" onclick="closeNotice()">Continuar</button>
   </div>
 </div>
